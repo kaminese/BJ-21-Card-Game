@@ -10,10 +10,11 @@ class Card:
         print(self.value,self.suit)
     
     def total(self):
-        #
+        # Face card values are converted to 10
         if self.value > 10:
             self.value = 10
             return self.value
+        # Ace card value is converted to 11
         if self.value == 1:
             self.value = 11
             return self.value
@@ -63,7 +64,7 @@ class Player:
 
 deck = DeckofCards()
 deck.shuffle()
-# deck.show()
+# deck.show() 
 
 # R1:
 Dealer = Player("Dealer")
