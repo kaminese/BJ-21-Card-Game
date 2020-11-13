@@ -1,5 +1,9 @@
 import random
 
+# Issue: Ace card needs to be 1/11
+# if the next card is valued at 11(Ace Card) subtract the added values by 10
+# if the addedvalues are 11, Ace Card is valued at 1
+
 # DECK OF CARDS and PLAYER HANDS
 class Card:
     def __init__(self, suit, value):
@@ -10,16 +14,14 @@ class Card:
         print(self.value,self.suit)
     
     def total(self):
-        # Face card values are converted to 10
         if self.value > 10:
             self.value = 10
-            return self.value
-        # Ace card value is converted to 11
+           # return self.value
         if self.value == 1:
             self.value = 11
-            return self.value
-        else:
-            return self.value
+           # return self.value
+        return self.value
+        
     
 class DeckofCards:
     def __init__(self):
@@ -31,9 +33,11 @@ class DeckofCards:
             for values in range(1, 14):
                 self.cards.append(Card(suits, values))
     
+    # function that reveals the entire deck
     def show(self):
         for cards in self.cards:
             cards.show()
+        print('')
 
     def shuffle(self):
         for i in range(len(self.cards) - 1, 0, -1):
@@ -52,33 +56,59 @@ class Player:
         self.hand.append(deck.drawacard())
     
     def showHand(self):
+        for card in self.hand:
+            card.show() # show each card object
+
+    def addvalues(self):
         addedvalues = 0
         for card in self.hand:
-            card.show()
             addedvalues += card.total()
             if addedvalues == 21:
                 return "BLACKJACK"
-            if addedvalues > 21: 
+            if addedvalues > 21:
                 return "BUST"
-        print(addedvalues)
+        return addedvalues
+            
+    def gameend(self):
+        if self.addvalues() == "BLACKJACK" or self.addvalues() == "BUST":
+            return True
+        else:
+            return False
+    
+def game(playername):
+    # Dealing Stage:
+    deck = DeckofCards()
+    deck.shuffle()
+    deck.show()
+    P1 = Player(playername)
+    P1.drawcard(deck)
+    P1.drawcard(deck)
+    P1.showHand()
+    print(P1.addvalues())
+    
+    # Playing Stage
+    ask = ''
+    while ask != "Stay":
+        ask = input("Hit or Stay? ")
 
+        if ask == "Hit":
+            P1.drawcard(deck)
+            P1.showHand()
+            print(P1.addvalues())
+            if P1.gameend() == True:
+                break
+        elif ask == "Stay":
+            return P1.addvalues()
+
+# game("Kami")
+
+# TESTING: 
 deck = DeckofCards()
 deck.shuffle()
-# deck.show() 
+deck.show()
 
-# R1:
-Dealer = Player("Dealer")
-Kami = Player("Kami")
-
-Dealer.drawcard(deck)
-Kami.drawcard(deck)
-Dealer.drawcard(deck)
-Kami.drawcard(deck)
-
-Kami.showHand()
-Dealer.showHand()
-
-
-
-
-
+Sora = Player("Sora")
+Sora.drawcard(deck)
+Sora.drawcard(deck)
+Sora.drawcard(deck)
+Sora.showHand()
