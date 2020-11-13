@@ -65,20 +65,17 @@ deck = DeckofCards()
 deck.shuffle()
 # deck.show()
 
-# Game 1:
+# R1:
 Dealer = Player("Dealer")
-Sora = Player("Sora")
+Kami = Player("Kami")
 
 Dealer.drawcard(deck)
-Sora.drawcard(deck)
+Kami.drawcard(deck)
 Dealer.drawcard(deck)
-Sora.drawcard(deck)
+Kami.drawcard(deck)
 
-Sora.showHand()
+Kami.showHand()
 Dealer.showHand()
-
-# Deciding to Draw: 
-Sora.drawcard(deck)
 
 
 
