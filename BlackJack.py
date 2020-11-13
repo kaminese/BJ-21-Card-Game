@@ -1,9 +1,5 @@
 import random
 
-# Issue: Ace card needs to be 1/11
-# if the next card is valued at 11(Ace Card) subtract the added values by 10
-# if the addedvalues are 11, Ace Card is valued at 1
-
 # DECK OF CARDS and PLAYER HANDS
 class Card:
     def __init__(self, suit, value):
@@ -16,13 +12,12 @@ class Card:
     def total(self):
         if self.value > 10:
             self.value = 10
-           # return self.value
-        if self.value == 1:
-            self.value = 11
-           # return self.value
+            return self.value
+        elif self.value == 1:
+            self.value += 10
+            return self.value
         return self.value
         
-    
 class DeckofCards:
     def __init__(self):
         self.cards = []
@@ -57,24 +52,45 @@ class Player:
     
     def showHand(self):
         for card in self.hand:
-            card.show() # show each card object
+            card.show() # show each card object (self.value, self.suit)
 
     def addvalues(self):
         addedvalues = 0
+        valueofprevcard = [] # will contain every value in the hand
+
         for card in self.hand:
-            addedvalues += card.total()
+            value = card.total()
+            addedvalues += value
+
+            # Appenging the value of 11 (Ace) into the values
+            if value == 11:
+                valueofprevcard.append(11)
+            else:
+                valueofprevcard.append(value)
+            
             if addedvalues == 21:
                 return "BLACKJACK"
             if addedvalues > 21:
+
+                # changing ACES (11) to 1
+                for i in valueofprevcard:
+                    if i == 11:
+                        i = 1
+                        addedvalues -= 10
+                        return addedvalues
+
                 return "BUST"
-        return addedvalues
             
+        print(valueofprevcard)
+        return addedvalues
+        
     def gameend(self):
         if self.addvalues() == "BLACKJACK" or self.addvalues() == "BUST":
             return True
         else:
             return False
-    
+
+
 def game(playername):
     # Dealing Stage:
     deck = DeckofCards()
@@ -103,6 +119,7 @@ def game(playername):
 # game("Kami")
 
 # TESTING: 
+
 deck = DeckofCards()
 deck.shuffle()
 deck.show()
@@ -110,5 +127,7 @@ deck.show()
 Sora = Player("Sora")
 Sora.drawcard(deck)
 Sora.drawcard(deck)
-Sora.drawcard(deck)
 Sora.showHand()
+Sora.addvalues()
+
+
