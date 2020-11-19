@@ -62,26 +62,24 @@ class Player:
             value = card.total()
             addedvalues += value
 
-            # Appenging the value of 11 (Ace) into the values
+            # Appending the value of 11 (Ace) into the values
             if value == 11:
                 valueofprevcard.append(11)
             else:
                 valueofprevcard.append(value)
             
             if addedvalues == 21:
-                return "BLACKJACK"
-            if addedvalues > 21:
-
+                return "BLACKJACK (21)"
+            elif addedvalues > 21:
                 # changing ACES (11) to 1
                 for i in valueofprevcard:
                     if i == 11:
                         i = 1
                         addedvalues -= 10
                         return addedvalues
-
-                return "BUST"
+                    else:
+                        return "BUST"
             
-        print(valueofprevcard)
         return addedvalues
         
     def gameend(self):
@@ -92,13 +90,23 @@ class Player:
 
 
 def game(playername):
-    # Dealing Stage:
+    # Shuffle Deck:
     deck = DeckofCards()
     deck.shuffle()
-    deck.show()
+    # deck.show()
+
+    # Players Established
     P1 = Player(playername)
+    D = Player("Dealer")
+
+    # Dealing Stage
     P1.drawcard(deck)
+   # P1.showHand()
+    D.drawcard(deck)
+   # D.showHand()
     P1.drawcard(deck)
+    D.drawcard(deck)
+
     P1.showHand()
     print(P1.addvalues())
     
@@ -112,22 +120,26 @@ def game(playername):
             P1.showHand()
             print(P1.addvalues())
             if P1.gameend() == True:
+                print("Player's Sum is:" ,P1.addvalues(), "\n")
                 break
         elif ask == "Stay":
-            return P1.addvalues()
+            print("Player's Sum is:" ,P1.addvalues(), "\n")
 
-# game("Kami")
+    print("Dealer's Turn: \n")
+    D.showHand()
+    print(D.addvalues())
 
-# TESTING: 
+    while D.addvalues() <= 16:
+        D.drawcard(deck)
+        D.showHand()
+        print(D.addvalues())
+        if D.gameend() == True:
+            break
+    
+    print("Dealer's Sum is:", D.addvalues(), "\n")
+    
+    oncemore = input("Would you like to play again? (Yes/No): ")
+    if oncemore == "Yes":
+        game(playername)
 
-deck = DeckofCards()
-deck.shuffle()
-deck.show()
-
-Sora = Player("Sora")
-Sora.drawcard(deck)
-Sora.drawcard(deck)
-Sora.showHand()
-Sora.addvalues()
-
-
+game("Kami")
